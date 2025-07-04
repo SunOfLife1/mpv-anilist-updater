@@ -181,16 +181,11 @@ function update_anilist(action)
         mp.osd_message("Launching AniList", 2)
     end
     local script_dir = debug.getinfo(1).source:match("@?(.*/)")
-    local directory = mp.get_property("working-directory")
-    -- It seems like in Linux working-directory sometimes returns it without a "/" at the end
-    directory = (directory:sub(-1) == '/' or directory:sub(-1) == '\\') and directory or directory .. '/'
-    -- For some reason, "path" sometimes returns the absolute path, sometimes it doesn't.
-    local file_path = mp.get_property("path")
-    local path = utils.join_path(directory, file_path)
+    local title = mp.get_property("media-title")
 
     local table = {}
     table.name = "subprocess"
-    table.args = {python_command, script_dir .. "anilistUpdater.py", path, action, python_options_json}
+    table.args = {python_command, script_dir .. "anilistUpdater.py", title, action, python_options_json}
     local cmd = mp.command_native_async(table, callback)
 end
 
